@@ -33,7 +33,7 @@ class UserInfoActivity : AppCompatActivity(), Contract.View {
     }
 
     override fun setUser(profileImg: Int, userName: String, phoneNumber: String) {
-        binding.userPhoto.setImageDrawable(getDrawable(profileImg))
+        binding.userPhoto.setImageResource(profileImg)
         binding.name.text = userName
         binding.phoneNumber.text = phoneNumber
     }
