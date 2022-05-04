@@ -7,22 +7,43 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.example.arquiteturadeapresentacao.R
-import com.example.arquiteturadeapresentacao.contract.Contract
 import com.example.arquiteturadeapresentacao.databinding.ActivityMainBinding
-import com.example.arquiteturadeapresentacao.presenter.UserInfoPresenter
+import com.example.arquiteturadeapresentacao.viewmodel.UserInfoViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-
-class UserInfoActivity : AppCompatActivity(), Contract.View {
+class UserInfoActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private var presenter: UserInfoPresenter = UserInfoPresenter(this)
+
+    private val viewModel by viewModel<UserInfoViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        presenter.start()
+
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        viewModel.loadUserInfo()
+
+        setStateObserver()
+        setListener()
     }
 
-    override fun showLoading(isLoading: Boolean) {
+    private fun setStateObserver() {
+        viewModel.userInfo.observe(this) { state ->
+            showLoading(state.isLoading)
+
+            state.showingUserInfo?.let { user ->
+                setUser(
+                    profileImg = user.profileImg,
+                    userName = user.userName,
+                    phoneNumber = user.phoneNumber
+                )
+            }
+        }
+    }
+
+    private fun showLoading(isLoading: Boolean) {
         with(binding) {
             progressBar.isVisible = isLoading
             userPhoto.isVisible = isLoading.not()
@@ -32,18 +53,13 @@ class UserInfoActivity : AppCompatActivity(), Contract.View {
         }
     }
 
-    override fun setUser(profileImg: Int, userName: String, phoneNumber: String) {
-        binding.userPhoto.setImageDrawable(getDrawable(profileImg))
+    private fun setUser(profileImg: Int, userName: String, phoneNumber: String) {
+        binding.userPhoto.setImageResource(profileImg)
         binding.name.text = userName
         binding.phoneNumber.text = phoneNumber
     }
 
-    override fun bindViews() {
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-    }
-
-    override fun setListener() {
+    private fun setListener() {
         binding.call.setOnClickListener {
             val intent = Intent(Intent.ACTION_DIAL)
             intent.data = Uri.parse("tel:" + binding.phoneNumber.text.toString())
