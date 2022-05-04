@@ -10,18 +10,12 @@ class UserInfoPresenter(private val view: Contract.View) : Contract.Presenter {
     private val useCase = GetUserInfoUseCase()
     private val scope = MainScope()
 
-    override fun start() {
-        view.bindViews()
-        requestUserInfo()
-        view.setListener()
-    }
-
-    private fun requestUserInfo() {
+    override fun onViewCreated() {
         view.showLoading(isLoading = true)
         scope.launch {
             val user = useCase()
 
-            view.setUser(
+            view.showUserData(
                 profileImg = user.profileImg,
                 userName = user.userName,
                 phoneNumber = user.phoneNumber
