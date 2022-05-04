@@ -31,7 +31,7 @@ class UserInfoViewModel(
                         isLoading = false,
                         User(
                             profileImg = user.profileImg,
-                            userName = user.userName,
+                            name = user.name,
                             phoneNumber = user.phoneNumber
                         )
                     )

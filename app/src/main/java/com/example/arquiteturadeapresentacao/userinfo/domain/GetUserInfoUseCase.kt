@@ -8,9 +8,9 @@ class GetUserInfoUseCase {
     suspend operator fun invoke(): User {
         delay(3000)
         return User(
-            R.drawable.aluna,
-            userName = "Adam",
-            phoneNumber = "(11)1111 - 1111"
+            name = "Adam",
+            phoneNumber = "(11)1111 - 1111",
+            R.drawable.aluna
         )
     }
 }

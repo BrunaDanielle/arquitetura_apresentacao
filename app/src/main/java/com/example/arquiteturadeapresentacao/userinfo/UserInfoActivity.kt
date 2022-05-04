@@ -5,20 +5,28 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import com.example.arquiteturadeapresentacao.R
 import com.example.arquiteturadeapresentacao.databinding.ActivityMainBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class UserInfoActivity : AppCompatActivity(R.layout.activity_main) {
-    private val binding: ActivityMainBinding = ActivityMainBinding.inflate(layoutInflater)
+class UserInfoActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
     private val viewModel by viewModel<UserInfoViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // setContentView(binding.root)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
+        setListeners()
         setStateObserver()
-        setListener()
+    }
+
+    private fun setListeners() {
+        binding.btnCall.setOnClickListener {
+            val intent = Intent(Intent.ACTION_DIAL)
+            intent.data = Uri.parse("tel:" + binding.tvPhoneNumber.text.toString())
+            startActivity(intent)
+        }
     }
 
     private fun setStateObserver() {
@@ -26,9 +34,9 @@ class UserInfoActivity : AppCompatActivity(R.layout.activity_main) {
             showLoading(state.isLoading)
 
             state.showingUserInfo?.let { user ->
-                setUser(
+                showUserData(
                     profileImg = user.profileImg,
-                    userName = user.userName,
+                    userName = user.name,
                     phoneNumber = user.phoneNumber
                 )
             }
@@ -45,19 +53,11 @@ class UserInfoActivity : AppCompatActivity(R.layout.activity_main) {
         }
     }
 
-    private fun setUser(profileImg: Int, userName: String, phoneNumber: String) {
+    private fun showUserData(profileImg: Int, userName: String, phoneNumber: String) {
         with(binding){
             ivUserPhoto.setImageResource(profileImg)
             tvName.text = userName
             tvPhoneNumber.text = phoneNumber
-        }
-    }
-
-    private fun setListener() {
-        binding.btnCall.setOnClickListener {
-            val intent = Intent(Intent.ACTION_DIAL)
-            intent.data = Uri.parse("tel:" + binding.tvPhoneNumber.text.toString())
-            startActivity(intent)
         }
     }
 }
