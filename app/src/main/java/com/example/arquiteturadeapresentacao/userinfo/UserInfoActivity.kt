@@ -1,36 +1,28 @@
-package com.example.arquiteturadeapresentacao.view
+package com.example.arquiteturadeapresentacao.userinfo
 
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.example.arquiteturadeapresentacao.R
 import com.example.arquiteturadeapresentacao.databinding.ActivityMainBinding
-import com.example.arquiteturadeapresentacao.viewmodel.UserInfoViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class UserInfoActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
-
+class UserInfoActivity : AppCompatActivity(R.layout.activity_main) {
+    private val binding: ActivityMainBinding = ActivityMainBinding.inflate(layoutInflater)
     private val viewModel by viewModel<UserInfoViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        viewModel.loadUserInfo()
+        // setContentView(binding.root)
 
         setStateObserver()
         setListener()
     }
 
     private fun setStateObserver() {
-        viewModel.userInfo.observe(this) { state ->
+        viewModel.userInfoLiveData.observe(this) { state ->
             showLoading(state.isLoading)
 
             state.showingUserInfo?.let { user ->
@@ -45,28 +37,27 @@ class UserInfoActivity : AppCompatActivity() {
 
     private fun showLoading(isLoading: Boolean) {
         with(binding) {
-            progressBar.isVisible = isLoading
-            userPhoto.isVisible = isLoading.not()
-            name.isVisible = isLoading.not()
-            phoneNumber.isVisible = isLoading.not()
-            call.isVisible = isLoading.not()
+            pbLoading.isVisible = isLoading
+            ivUserPhoto.isVisible = isLoading.not()
+            tvName.isVisible = isLoading.not()
+            tvPhoneNumber.isVisible = isLoading.not()
+            btnCall.isVisible = isLoading.not()
         }
     }
 
     private fun setUser(profileImg: Int, userName: String, phoneNumber: String) {
-        binding.userPhoto.setImageResource(profileImg)
-        binding.name.text = userName
-        binding.phoneNumber.text = phoneNumber
-    }
-
-    private fun setListener() {
-        binding.call.setOnClickListener {
-            val intent = Intent(Intent.ACTION_DIAL)
-            intent.data = Uri.parse("tel:" + binding.phoneNumber.text.toString())
-            resultLauncher.launch(intent)
+        with(binding){
+            ivUserPhoto.setImageResource(profileImg)
+            tvName.text = userName
+            tvPhoneNumber.text = phoneNumber
         }
     }
 
-    var resultLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {}
+    private fun setListener() {
+        binding.btnCall.setOnClickListener {
+            val intent = Intent(Intent.ACTION_DIAL)
+            intent.data = Uri.parse("tel:" + binding.tvPhoneNumber.text.toString())
+            startActivity(intent)
+        }
+    }
 }

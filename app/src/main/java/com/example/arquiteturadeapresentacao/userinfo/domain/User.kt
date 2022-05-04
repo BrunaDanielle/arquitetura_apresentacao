@@ -1,4 +1,4 @@
-package com.example.arquiteturadeapresentacao.model
+package com.example.arquiteturadeapresentacao.userinfo.domain
 
 import androidx.annotation.DrawableRes
 

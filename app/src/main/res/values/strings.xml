@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Arquitetura de Apresentacao</string>
+    <string name="ligar">Ligar</string>
+    <string name="foto_do_usuario">Foto do usuário</string>
 </resources>

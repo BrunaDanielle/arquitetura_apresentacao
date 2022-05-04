@@ -1,7 +1,7 @@
-package com.example.arquiteturadeapresentacao.di
+package com.example.arquiteturadeapresentacao.application.di
 
-import com.example.arquiteturadeapresentacao.model.GetUserInfoUseCase
-import com.example.arquiteturadeapresentacao.viewmodel.UserInfoViewModel
+import com.example.arquiteturadeapresentacao.userinfo.domain.GetUserInfoUseCase
+import com.example.arquiteturadeapresentacao.userinfo.UserInfoViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
