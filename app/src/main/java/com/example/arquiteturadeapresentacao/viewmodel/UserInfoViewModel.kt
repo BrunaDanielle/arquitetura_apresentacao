@@ -17,14 +17,12 @@ class UserInfoViewModel(
     private val _userInfo: MutableLiveData<UserInfoState> = MutableLiveData()
     val userInfo: LiveData<UserInfoState> = _userInfo
 
-    fun loadUserInfo() {
-        _userInfo.value = UserInfoState(isLoading = true)
+    private fun loadUserInfo() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 val user = useCase.invoke()
                 _userInfo.postValue(
-                    UserInfoState(
-                        isLoading = false,
+                    UserInfoState.ShowingUserInfo(
                         User(
                             profileImg = user.profileImg,
                             userName = user.userName,
@@ -33,6 +31,13 @@ class UserInfoViewModel(
                     )
                 )
             }
+        }
+    }
+
+    fun sendIntent(intent: UserInfoIntent) {
+        when(intent) {
+            UserInfoIntent.Loading -> _userInfo.value = UserInfoState.Loading
+            is UserInfoIntent.SetUserInfo -> loadUserInfo()
         }
     }
 }

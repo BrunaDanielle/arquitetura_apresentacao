@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.example.arquiteturadeapresentacao.R
 import com.example.arquiteturadeapresentacao.databinding.ActivityMainBinding
+import com.example.arquiteturadeapresentacao.viewmodel.UserInfoIntent
+import com.example.arquiteturadeapresentacao.viewmodel.UserInfoState
 import com.example.arquiteturadeapresentacao.viewmodel.UserInfoViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -23,7 +25,7 @@ class UserInfoActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel.loadUserInfo()
+        viewModel.sendIntent(UserInfoIntent.Loading)
 
         setStateObserver()
         setListener()
@@ -31,14 +33,19 @@ class UserInfoActivity : AppCompatActivity() {
 
     private fun setStateObserver() {
         viewModel.userInfo.observe(this) { state ->
-            showLoading(state.isLoading)
-
-            state.showingUserInfo?.let { user ->
-                setUser(
-                    profileImg = user.profileImg,
-                    userName = user.userName,
-                    phoneNumber = user.phoneNumber
-                )
+            when (state) {
+                UserInfoState.Loading -> {
+                    showLoading(true)
+                    viewModel.sendIntent(UserInfoIntent.SetUserInfo)
+                }
+                is UserInfoState.ShowingUserInfo -> {
+                    showLoading(false)
+                    setUser(
+                        profileImg = state.user.profileImg,
+                        userName = state.user.userName,
+                        phoneNumber = state.user.phoneNumber
+                    )
+                }
             }
         }
     }
