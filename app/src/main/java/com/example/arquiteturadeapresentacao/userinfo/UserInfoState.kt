@@ -4,5 +4,6 @@ import com.example.arquiteturadeapresentacao.userinfo.domain.User
 
 data class UserInfoState(
     val isLoading: Boolean = false,
-    val showingUserInfo: User? = null
+    val showingUserInfo: User? = null,
+    val hasError: Boolean = false,
 )

@@ -26,17 +26,27 @@ class UserInfoViewModel(
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 val user = useCase.invoke()
-                userInfoMutableLiveData.postValue(
-                    UserInfoState(
-                        isLoading = false,
-                        User(
-                            profileImg = user.profileImg,
-                            name = user.name,
-                            phoneNumber = user.phoneNumber
+
+                val randomNumber = (0 until 10).random()
+                if (randomNumber < 4) {
+                    userInfoMutableLiveData.postValue(UserInfoState(hasError = true))
+                } else {
+                    userInfoMutableLiveData.postValue(
+                        UserInfoState(
+                            isLoading = false,
+                            User(
+                                profileImg = user.profileImg,
+                                name = user.name,
+                                phoneNumber = user.phoneNumber
+                            )
                         )
                     )
-                )
+                }
             }
         }
+    }
+
+    fun onRetryClicked() {
+        getUserInfo()
     }
 }
