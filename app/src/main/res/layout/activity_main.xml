@@ -4,50 +4,51 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.UserInfoActivity">
+    tools:context=".userinfo.UserInfoActivity">
 
     <TextView
-        android:id="@+id/name"
+        android:id="@+id/tvName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Meu nome"
+        tools:text="Meu nome"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userPhoto" />
+        app:layout_constraintTop_toBottomOf="@+id/ivUserPhoto" />
 
     <ImageView
-        android:id="@+id/userPhoto"
+        android:id="@+id/ivUserPhoto"
         android:layout_width="88dp"
         android:layout_height="77dp"
         android:layout_marginTop="85dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@tools:sample/avatars" />
+        tools:src="@tools:sample/avatars"
+        android:contentDescription="@string/foto_do_usuario" />
 
     <TextView
-        android:id="@+id/phoneNumber"
+        android:id="@+id/tvPhoneNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="33dp"
-        android:text="11 1111-1111"
+        tools:text="11 1111-1111"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/name" />
+        app:layout_constraintTop_toBottomOf="@id/tvName" />
 
     <Button
-        android:id="@+id/call"
+        android:id="@+id/btnCall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Ligar"
+        android:text="@string/ligar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/phoneNumber" />
+        app:layout_constraintTop_toBottomOf="@id/tvPhoneNumber" />
 
     <ProgressBar
-        android:id="@+id/progressBar"
+        android:id="@+id/pbLoading"
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
