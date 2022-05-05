@@ -11,17 +11,48 @@ class UserInfoPresenter(private val view: Contract.View) : Contract.Presenter {
     private val scope = MainScope()
 
     override fun onViewCreated() {
-        view.showLoading(isLoading = true)
+        showingLoad()
+        requestUserData()
+    }
+
+    override fun onRetryClicked() {
+        showingLoad()
+        requestUserData()
+    }
+
+    private fun requestUserData() {
         scope.launch {
             val user = useCase()
 
-            view.showUserData(
-                profileImg = user.profileImg,
-                userName = user.userName,
-                phoneNumber = user.phoneNumber
-            )
-
-            view.showLoading(isLoading = false)
+            val randomNumber = (0..10).random()
+            if (randomNumber < 4) {
+                showingError()
+            } else {
+                hidingLoad()
+                view.showUserData(
+                    profileImg = user.profileImg,
+                    userName = user.userName,
+                    phoneNumber = user.phoneNumber
+                )
+            }
         }
+    }
+
+    private fun showingLoad() {
+        view.showLoading(isLoading = true)
+        view.showButtonRetry(false)
+        view.setComponentsVisibility(false)
+    }
+
+    private fun hidingLoad() {
+        view.showLoading(isLoading = false)
+        view.showButtonRetry(false)
+        view.setComponentsVisibility(true)
+    }
+
+    private fun showingError() {
+        view.showLoading(isLoading = false)
+        view.showButtonRetry(true)
+        view.setComponentsVisibility(false)
     }
 }

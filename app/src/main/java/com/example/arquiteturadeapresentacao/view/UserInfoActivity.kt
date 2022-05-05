@@ -17,34 +17,47 @@ class UserInfoActivity : AppCompatActivity(R.layout.activity_main), Contract.Vie
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding =  ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setListener()
+        setListeners()
         presenter.onViewCreated()
     }
 
     override fun showLoading(isLoading: Boolean) {
+        binding.pbLoading.isVisible = isLoading
+    }
+
+    override fun setComponentsVisibility(isVisible: Boolean) {
         with(binding) {
-            pbLoading.isVisible = isLoading
-            ivUserPhoto.isVisible = isLoading.not()
-            tvName.isVisible = isLoading.not()
-            tvPhoneNumber.isVisible = isLoading.not()
-            btnCall.isVisible = isLoading.not()
+            ivUserPhoto.isVisible = isVisible
+            tvName.isVisible = isVisible
+            tvPhoneNumber.isVisible = isVisible
+            btnCall.isVisible = isVisible
         }
     }
 
-    override fun showUserData(profileImg: Int, userName: String, phoneNumber: String) {
-        binding.ivUserPhoto.setImageResource(profileImg)
-        binding.tvName.text = userName
-        binding.tvPhoneNumber.text = phoneNumber
+    override fun showButtonRetry(isVisible: Boolean) {
+        binding.btnRetry.isVisible = isVisible
     }
 
-    private fun setListener() {
+    override fun showUserData(profileImg: Int, userName: String, phoneNumber: String) {
+        with(binding) {
+            ivUserPhoto.setImageResource(profileImg)
+            tvName.text = userName
+            tvPhoneNumber.text = phoneNumber
+        }
+    }
+
+    private fun setListeners() {
         binding.btnCall.setOnClickListener {
             val intent = Intent(Intent.ACTION_DIAL)
             intent.data = Uri.parse("tel:" + binding.tvPhoneNumber.text.toString())
             startActivity(intent)
+        }
+
+        binding.btnRetry.setOnClickListener{
+            presenter.onRetryClicked()
         }
     }
 }
