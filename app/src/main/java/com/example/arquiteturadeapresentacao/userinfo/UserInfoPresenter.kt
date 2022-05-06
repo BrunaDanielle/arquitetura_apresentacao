@@ -1,58 +1,58 @@
 package com.example.arquiteturadeapresentacao.userinfo
 
-import com.example.arquiteturadeapresentacao.userinfo.contract.Contract
 import com.example.arquiteturadeapresentacao.userinfo.domain.GetUserInfoUseCase
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
 class UserInfoPresenter(private val view: Contract.View) : Contract.Presenter {
 
-    private val useCase = GetUserInfoUseCase()
+    private val getUserInfoUseCase = GetUserInfoUseCase()
     private val scope = MainScope()
 
     override fun onViewCreated() {
-        showingLoad()
         requestUserData()
     }
 
+    override fun onCallClicked() {
+        view.navigateToCall()
+    }
+
     override fun onRetryClicked() {
-        showingLoad()
         requestUserData()
     }
 
     private fun requestUserData() {
+        showLoading()
         scope.launch {
-            val user = useCase()
-
-            val randomNumber = (0..10).random()
-            if (randomNumber < 4) {
-                showingError()
-            } else {
-                hidingLoad()
-                view.showUserData(
+            try {
+                val user = getUserInfoUseCase()
+                view.setUserData(
                     profileImg = user.profileImg,
                     userName = user.userName,
                     phoneNumber = user.phoneNumber
                 )
+                showSuccess()
+            } catch (e: Exception) {
+                showEmptyState()
             }
         }
     }
 
-    private fun showingLoad() {
-        view.showLoading(isLoading = true)
-        view.showButtonRetry(false)
-        view.setComponentsVisibility(false)
+    private fun showLoading() {
+        view.setLoadingVisibility(true)
+        view.setEmptyStateVisibility(false)
+        view.setSuccessVisibility(false)
     }
 
-    private fun hidingLoad() {
-        view.showLoading(isLoading = false)
-        view.showButtonRetry(false)
-        view.setComponentsVisibility(true)
+    private fun showSuccess() {
+        view.setLoadingVisibility(false)
+        view.setEmptyStateVisibility(false)
+        view.setSuccessVisibility(true)
     }
 
-    private fun showingError() {
-        view.showLoading(isLoading = false)
-        view.showButtonRetry(true)
-        view.setComponentsVisibility(false)
+    private fun showEmptyState() {
+        view.setLoadingVisibility(false)
+        view.setEmptyStateVisibility(true)
+        view.setSuccessVisibility(false)
     }
 }
