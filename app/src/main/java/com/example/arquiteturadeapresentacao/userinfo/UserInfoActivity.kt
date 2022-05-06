@@ -1,4 +1,4 @@
-package com.example.arquiteturadeapresentacao.view
+package com.example.arquiteturadeapresentacao.userinfo
 
 import android.content.Intent
 import android.net.Uri
@@ -6,9 +6,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.example.arquiteturadeapresentacao.R
-import com.example.arquiteturadeapresentacao.contract.Contract
+import com.example.arquiteturadeapresentacao.userinfo.contract.Contract
 import com.example.arquiteturadeapresentacao.databinding.ActivityMainBinding
-import com.example.arquiteturadeapresentacao.presenter.UserInfoPresenter
 
 
 class UserInfoActivity : AppCompatActivity(R.layout.activity_main), Contract.View {

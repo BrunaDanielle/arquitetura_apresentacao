@@ -1,7 +1,7 @@
-package com.example.arquiteturadeapresentacao.presenter
+package com.example.arquiteturadeapresentacao.userinfo
 
-import com.example.arquiteturadeapresentacao.contract.Contract
-import com.example.arquiteturadeapresentacao.model.GetUserInfoUseCase
+import com.example.arquiteturadeapresentacao.userinfo.contract.Contract
+import com.example.arquiteturadeapresentacao.userinfo.domain.GetUserInfoUseCase
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 

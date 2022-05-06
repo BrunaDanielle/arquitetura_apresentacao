@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ArquiteturaDeApresentacao">
         <activity
-            android:name="com.example.arquiteturadeapresentacao.view.UserInfoActivity"
+            android:name="com.example.arquiteturadeapresentacao.userinfo.UserInfoActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

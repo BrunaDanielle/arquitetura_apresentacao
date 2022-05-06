@@ -1,7 +1,6 @@
-package com.example.arquiteturadeapresentacao.contract
+package com.example.arquiteturadeapresentacao.userinfo.contract
 
 import androidx.annotation.DrawableRes
-import com.example.arquiteturadeapresentacao.model.User
 
 interface Contract {
     interface View {
