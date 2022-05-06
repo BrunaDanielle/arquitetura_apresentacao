@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class UserInfoViewModel(
-    private val useCase: GetUserInfoUseCase
+    private val getUserInfoUseCase: GetUserInfoUseCase
 ) : ViewModel() {
 
     private val userInfoMutableLiveData: MutableLiveData<UserInfoState> = MutableLiveData()
@@ -28,12 +28,8 @@ class UserInfoViewModel(
         userInfoMutableLiveData.value = UserInfoState(isLoading = true)
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                val user = useCase.invoke()
-
-                val randomNumber = (0 until 10).random()
-                if (randomNumber < 4) {
-                    userInfoMutableLiveData.postValue(UserInfoState(hasError = true))
-                } else {
+                try {
+                    val user = getUserInfoUseCase.invoke()
                     userInfoMutableLiveData.postValue(
                         UserInfoState(
                             isLoading = false,
@@ -44,6 +40,8 @@ class UserInfoViewModel(
                             )
                         )
                     )
+                } catch (e: Exception) {
+                    userInfoMutableLiveData.postValue(UserInfoState(hasError = true))
                 }
             }
         }
