@@ -1,4 +1,4 @@
-package com.example.arquiteturadeapresentacao.application.di
+package com.example.arquiteturadeapresentacao.application
 
 import android.app.Application
 import com.example.arquiteturadeapresentacao.application.di.UserInfoModule.presentationModule

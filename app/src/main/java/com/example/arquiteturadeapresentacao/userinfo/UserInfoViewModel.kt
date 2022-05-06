@@ -11,11 +11,14 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class UserInfoViewModel(
-    private val useCase: GetUserInfoUseCase
+    private val getUserInfoUseCase: GetUserInfoUseCase
 ) : ViewModel() {
 
     private val userInfoMutableLiveData: MutableLiveData<UserInfoState> = MutableLiveData()
     val userInfoLiveData: LiveData<UserInfoState> = userInfoMutableLiveData
+
+    private val navigateToCallMutableLiveData: MutableLiveData<String> = MutableLiveData()
+    val navigateToCallLiveData: LiveData<String> = navigateToCallMutableLiveData
 
     init {
         getUserInfo()
@@ -25,12 +28,8 @@ class UserInfoViewModel(
         userInfoMutableLiveData.value = UserInfoState(isLoading = true)
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                val user = useCase.invoke()
-
-                val randomNumber = (0 until 10).random()
-                if (randomNumber < 4) {
-                    userInfoMutableLiveData.postValue(UserInfoState(hasError = true))
-                } else {
+                try {
+                    val user = getUserInfoUseCase.invoke()
                     userInfoMutableLiveData.postValue(
                         UserInfoState(
                             isLoading = false,
@@ -41,9 +40,16 @@ class UserInfoViewModel(
                             )
                         )
                     )
+                } catch (e: Exception) {
+                    userInfoMutableLiveData.postValue(UserInfoState(hasError = true))
                 }
             }
         }
+    }
+
+    fun onCallClicked(phoneNumber: String) {
+        // TODO usar classe de Action
+        navigateToCallMutableLiveData.value = phoneNumber
     }
 
     fun onRetryClicked() {

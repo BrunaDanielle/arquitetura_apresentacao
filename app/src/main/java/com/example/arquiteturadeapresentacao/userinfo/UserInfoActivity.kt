@@ -5,11 +5,10 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import com.example.arquiteturadeapresentacao.R
 import com.example.arquiteturadeapresentacao.databinding.ActivityMainBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class UserInfoActivity : AppCompatActivity(R.layout.activity_main) {
+class UserInfoActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val viewModel by viewModel<UserInfoViewModel>()
 
@@ -20,52 +19,55 @@ class UserInfoActivity : AppCompatActivity(R.layout.activity_main) {
 
         setListeners()
         setStateObserver()
+        setActionObserver()
     }
 
     private fun setListeners() {
         binding.btnCall.setOnClickListener {
-            val intent = Intent(Intent.ACTION_DIAL)
-            intent.data = Uri.parse("tel:" + binding.tvPhoneNumber.text.toString())
-            startActivity(intent)
+            viewModel.onCallClicked(binding.tvPhoneNumber.text.toString())
         }
 
-        binding.btnRetry.setOnClickListener{
+        binding.btnRetry.setOnClickListener {
             viewModel.onRetryClicked()
         }
     }
 
     private fun setStateObserver() {
         viewModel.userInfoLiveData.observe(this) { state ->
-
             when {
-                state.isLoading.and(state.hasError.not()) -> {
-                    showLoading(true)
-                    setComponentsVisibility(false)
-                    showButtonTryAgain(false)
+                state.isLoading -> {
+                    setSuccessVisibility(false)
+                    setEmptyStateVisibility(false)
+                    setLoadingVisibility(true)
                 }
-                state.hasError.and(state.isLoading.not()) -> {
-                    showButtonTryAgain(true)
-                    showLoading(false)
-                    setComponentsVisibility(false)
+                state.hasError -> {
+                    setLoadingVisibility(false)
+                    setSuccessVisibility(false)
+                    setEmptyStateVisibility(true)
                 }
                 else -> {
-                    showButtonTryAgain(false)
-                    showLoading(false)
-                    setComponentsVisibility(true)
+                    setEmptyStateVisibility(false)
+                    setLoadingVisibility(false)
+                    setSuccessVisibility(true)
+                    state.showingUserInfo?.let { user ->
+                        setUserData(
+                            profileImg = user.profileImg,
+                            userName = user.name,
+                            phoneNumber = user.phoneNumber
+                        )
+                    }
                 }
-            }
-
-            state.showingUserInfo?.let { user ->
-                showUserData(
-                    profileImg = user.profileImg,
-                    userName = user.name,
-                    phoneNumber = user.phoneNumber
-                )
             }
         }
     }
 
-    private fun setComponentsVisibility(isVisible: Boolean) {
+    private fun setActionObserver() {
+        viewModel.navigateToCallLiveData.observe(this) { phoneNumber ->
+            navigateToCall(phoneNumber)
+        }
+    }
+
+    private fun setSuccessVisibility(isVisible: Boolean) {
         with(binding) {
             ivUserPhoto.isVisible = isVisible
             tvName.isVisible = isVisible
@@ -74,19 +76,25 @@ class UserInfoActivity : AppCompatActivity(R.layout.activity_main) {
         }
     }
 
-    private fun showLoading(isLoading: Boolean) {
-        binding.pbLoading.isVisible = isLoading
+    private fun setLoadingVisibility(isVisible: Boolean) {
+        binding.pbLoading.isVisible = isVisible
     }
 
-    private fun showButtonTryAgain(isVisible: Boolean) {
+    private fun setEmptyStateVisibility(isVisible: Boolean) {
         binding.btnRetry.isVisible = isVisible
     }
 
-    private fun showUserData(profileImg: Int, userName: String, phoneNumber: String) {
+    private fun setUserData(profileImg: Int, userName: String, phoneNumber: String) {
         with(binding) {
             ivUserPhoto.setImageResource(profileImg)
             tvName.text = userName
             tvPhoneNumber.text = phoneNumber
         }
+    }
+
+    private fun navigateToCall(phoneNumber: String) {
+        val intent = Intent(Intent.ACTION_DIAL)
+        intent.data = Uri.parse("tel:$phoneNumber")
+        startActivity(intent)
     }
 }
