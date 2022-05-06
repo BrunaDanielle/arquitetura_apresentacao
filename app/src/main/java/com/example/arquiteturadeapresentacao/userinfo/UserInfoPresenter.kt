@@ -13,8 +13,8 @@ class UserInfoPresenter(private val view: Contract.View) : Contract.Presenter {
         requestUserData()
     }
 
-    override fun onCallClicked() {
-        view.navigateToCall()
+    override fun onCallClicked(phoneNumber: String) {
+        view.navigateToCall(phoneNumber)
     }
 
     override fun onRetryClicked() {

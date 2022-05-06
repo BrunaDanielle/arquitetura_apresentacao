@@ -11,9 +11,9 @@ class GetUserInfoUseCase {
             throw Exception("Unexpected error")
         } else {
             return User(
-                R.drawable.aluna,
                 userName = "Adam",
-                phoneNumber = "(11)1111 - 1111"
+                phoneNumber = "(11)1111 - 1111",
+                profileImg = R.drawable.aluna,
             )
         }
     }

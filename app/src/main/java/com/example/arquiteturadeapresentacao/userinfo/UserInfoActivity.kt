@@ -22,7 +22,7 @@ class UserInfoActivity : AppCompatActivity(), Contract.View {
 
     private fun setListeners() {
         binding.btnCall.setOnClickListener {
-            presenter.onCallClicked()
+            presenter.onCallClicked(binding.tvPhoneNumber.text.toString())
         }
 
         binding.btnRetry.setOnClickListener{
@@ -55,9 +55,9 @@ class UserInfoActivity : AppCompatActivity(), Contract.View {
         }
     }
 
-    override fun navigateToCall() {
+    override fun navigateToCall(phoneNumber: String) {
         val intent = Intent(Intent.ACTION_DIAL)
-        intent.data = Uri.parse("tel:" + binding.tvPhoneNumber.text.toString())
+        intent.data = Uri.parse("tel:$phoneNumber")
         startActivity(intent)
     }
 }

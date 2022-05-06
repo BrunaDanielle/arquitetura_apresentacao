@@ -12,12 +12,12 @@ interface Contract {
             userName: String,
             phoneNumber: String
         )
-        fun navigateToCall()
+        fun navigateToCall(phoneNumber: String)
     }
 
     interface Presenter {
         fun onViewCreated()
-        fun onCallClicked()
+        fun onCallClicked(phoneNumber: String)
         fun onRetryClicked()
     }
 }
