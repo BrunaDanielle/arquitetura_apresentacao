@@ -9,7 +9,7 @@ import com.example.arquiteturadeapresentacao.databinding.ActivityMainBinding
 
 class UserInfoActivity : AppCompatActivity(), Contract.View {
     private lateinit var binding: ActivityMainBinding
-    private var presenter: UserInfoPresenter = UserInfoPresenter(this)
+    private var presenter: Contract.Presenter = UserInfoPresenter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
