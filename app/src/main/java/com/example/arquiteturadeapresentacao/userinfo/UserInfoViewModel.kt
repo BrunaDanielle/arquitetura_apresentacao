@@ -20,9 +20,18 @@ class UserInfoViewModel(
     val navigateToCallLiveData: LiveData<SetAction<String>> = navigateToCallMutableLiveData
 
     fun sendIntent(intent: UserInfoIntent) {
-        when (intent) {
-            is UserInfoIntent.SeeUserData -> loadUserInfo()
-            is UserInfoIntent.CallToUser -> navigateToCall(intent.phoneNumber)
+        val action = when (intent) {
+            is UserInfoIntent.SeeUserData -> UserInfoAction.GetUpdatedData
+            is UserInfoIntent.UpdateUserData -> UserInfoAction.GetUpdatedData
+            is UserInfoIntent.CallToUser -> UserInfoAction.NavigateToCall(intent.phoneNumber)
+        }
+        handleAction(action)
+    }
+
+    private fun handleAction(action: UserInfoAction) {
+        when(action) {
+            is UserInfoAction.GetUpdatedData -> loadUserInfo()
+            is UserInfoAction.NavigateToCall -> navigateToCall(action.phoneNumber)
         }
     }
 
