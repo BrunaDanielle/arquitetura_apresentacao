@@ -1,6 +1,6 @@
-package com.example.arquiteturadeapresentacao.userinfofeature
+package com.example.arquiteturadeapresentacao.userinfo
 
-import com.example.arquiteturadeapresentacao.domain.User
+import com.example.arquiteturadeapresentacao.userinfo.domain.User
 
 sealed interface UserInfoState {
     object Loading : UserInfoState
