@@ -64,7 +64,9 @@ class UserInfoActivity : AppCompatActivity() {
 
     private fun setActionObserver() {
         viewModel.navigateToCallLiveData.observe(this) { phoneNumber ->
-            navigateToCall(phoneNumber)
+            phoneNumber.sendActionIfNotHandled()?.let {
+                navigateToCall(it)
+            }
         }
     }
 

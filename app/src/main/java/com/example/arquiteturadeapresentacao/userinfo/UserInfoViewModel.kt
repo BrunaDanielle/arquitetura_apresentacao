@@ -16,8 +16,8 @@ class UserInfoViewModel(
     private val userInfoMutableLiveData: MutableLiveData<UserInfoState> = MutableLiveData()
     val userInfoLiveData: LiveData<UserInfoState> = userInfoMutableLiveData
 
-    private val navigateToCallMutableLiveData: MutableLiveData<String> = MutableLiveData()
-    val navigateToCallLiveData: LiveData<String> = navigateToCallMutableLiveData
+    private val navigateToCallMutableLiveData: MutableLiveData<SetAction<String>> = MutableLiveData()
+    val navigateToCallLiveData: LiveData<SetAction<String>> = navigateToCallMutableLiveData
 
     fun sendIntent(intent: UserInfoIntent) {
         when (intent) {
@@ -43,7 +43,6 @@ class UserInfoViewModel(
     }
 
     private fun navigateToCall(phoneNumber: String) {
-        // TODO usar classe de Action
-        navigateToCallMutableLiveData.value = phoneNumber
+        navigateToCallMutableLiveData.value = SetAction(phoneNumber)
     }
 }
